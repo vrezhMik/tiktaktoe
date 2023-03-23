@@ -2,7 +2,7 @@
   <main>
     <Player />
     <div class="container">
-      <Square v-for="i in 9" :key="i" @click="addItem()" />
+      <Square v-for="i in 9" :key="i" @click="addItem(i)" :id="i" />
     </div>
     <Player />
   </main>
@@ -11,9 +11,13 @@
 <script lang="ts" setup>
 import Square from "./components/Square.vue";
 import Player from "./components/Player.vue";
-
-function addItem(): void {
-  console.log("addItem");
+import Store from "./store/index";
+function addItem(id: number): void {
+  if (Store.state.turn % 2 == 0) Store.state.val = "X";
+  else Store.state.val = "O";
+  Store.state.turn++;
+  if (!Store.state.blocks[id]) Store.state.blocks[id] = Store.state.val;
+  Store.state.pressed = id;
 }
 </script>
 
