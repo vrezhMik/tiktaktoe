@@ -1,27 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <main>
+    <div class="container">
+      <Square v-for="i in 9" :key="i" @click="addItem()" />
+    </div>
+  </main>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+<script lang="ts" setup>
+import Square from "./components/Square.vue";
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-});
+function addItem(): void {
+  console.log("addItem");
+}
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .container {
+    border: 1px solid black;
+    width: 450px;
+    height: 450px;
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 </style>
