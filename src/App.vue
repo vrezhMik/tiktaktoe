@@ -27,7 +27,7 @@ function addItem(id: number): void {
 }
 
 function check(): void {
-  if (empty_spaces()) alert("Game over");
+  if (empty_spaces()) end_game();
   else if (check_diaganale_right()) alert("You won1");
   else if (check_diaganale_left()) alert("You won2");
   else if (check_row()) alert("You won3");
@@ -115,8 +115,10 @@ function empty_spaces(): boolean {
     topRow === boardSize &&
     middleRow === boardSize &&
     bottomRow === boardSize
-  )
+  ) {
+    Store.state.gameMode = false;
     return true;
+  }
   return false;
 }
 
@@ -125,6 +127,15 @@ function set_to_check_arr(id: number): void {
   else if (id < 6)
     Store.state.checkBlocks[1][Math.round(id % 3)] = Store.state.val;
   else Store.state.checkBlocks[2][Math.round(id % 3)] = Store.state.val;
+}
+
+function end_game(): void {
+  Store.state.turn = 0;
+  Store.state.val = "X";
+  Store.state.pressed = 0;
+  Store.state.blocks = [];
+  Store.state.checkBlocks = [[], [], []];
+  Store.state.gameMode = true;
 }
 </script>
 
