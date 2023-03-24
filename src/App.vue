@@ -42,13 +42,13 @@ function check_row(): boolean {
 
     const hasX = row.includes("X");
     const hasO = row.includes("O");
-    const isFull = row.length == boardSize;
-    console.log(row, hasX, hasO);
-    const hasWinnginRow = (hasX && !hasO) || (!hasX && hasO);
-    if (hasWinnginRow && isFull) {
-      Store.state.gameMode = false;
-      hasWinner = true;
-      break;
+    if (row[0] && row[1] && row[2]) {
+      const hasWinnginRow = (hasX && !hasO) || (!hasX && hasO);
+      if (hasWinnginRow) {
+        Store.state.gameMode = false;
+        hasWinner = true;
+        break;
+      }
     }
   }
   return hasWinner;
