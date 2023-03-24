@@ -27,23 +27,24 @@ function addItem(id: number): void {
 }
 
 function check(): void {
-  if (check_diaganale_right()) alert("You won1");
+  if (empty_spaces()) alert("Game over");
+  else if (check_diaganale_right()) alert("You won1");
   else if (check_diaganale_left()) alert("You won2");
   else if (check_row()) alert("You won3");
   else if (check_column()) alert("You won4");
 }
 
 function check_row(): boolean {
-  var hasWinner = false;
-  const checkBlocks = Store.state.checkBlocks;
-  const boardSize = 3;
+  var hasWinner: boolean = false;
+  const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
+  const boardSize: number = 3;
   for (let i = 0; i < boardSize; i++) {
-    const row = checkBlocks[i];
+    const row: Array<string> = checkBlocks[i];
 
-    const hasX = row.includes("X");
-    const hasO = row.includes("O");
+    const hasX: boolean = row.includes("X");
+    const hasO: boolean = row.includes("O");
     if (row[0] && row[1] && row[2]) {
-      const hasWinnginRow = (hasX && !hasO) || (!hasX && hasO);
+      const hasWinnginRow: boolean = (hasX && !hasO) || (!hasX && hasO);
       if (hasWinnginRow) {
         Store.state.gameMode = false;
         hasWinner = true;
@@ -55,14 +56,15 @@ function check_row(): boolean {
 }
 
 function check_column(): boolean {
-  const checkBlocks = Store.state.checkBlocks;
-  const boardSize = 3;
-  for (var i = 0; i < boardSize; i++) {
-    const top = checkBlocks[0][i];
-    const middle = checkBlocks[1][i];
-    const bottom = checkBlocks[2][i];
+  const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
+  const boardSize: number = 3;
 
-    const isFull = top && middle && bottom;
+  for (var i = 0; i < boardSize; i++) {
+    const top: string = checkBlocks[0][i];
+    const middle: string = checkBlocks[1][i];
+    const bottom: string = checkBlocks[2][i];
+
+    const isFull: string = top && middle && bottom;
     if (top === middle && top === bottom && isFull) {
       Store.state.gameMode = false;
       return true;
@@ -72,10 +74,11 @@ function check_column(): boolean {
 }
 
 function check_diaganale_right(): boolean {
-  const checkBlocks = Store.state.checkBlocks;
-  const top = checkBlocks[0][0];
-  const middle = checkBlocks[1][1];
-  const bottom = checkBlocks[2][2];
+  const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
+
+  const top: string = checkBlocks[0][0];
+  const middle: string = checkBlocks[1][1];
+  const bottom: string = checkBlocks[2][2];
   if (top && middle && bottom) {
     if (top == middle && top == bottom) {
       Store.state.gameMode = false;
@@ -86,16 +89,34 @@ function check_diaganale_right(): boolean {
 }
 
 function check_diaganale_left(): boolean {
-  const checkBlocks = Store.state.checkBlocks;
-  const top = checkBlocks[2][0];
-  const middle = checkBlocks[1][1];
-  const bottom = checkBlocks[0][2];
+  const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
+
+  const top: string = checkBlocks[2][0];
+  const middle: string = checkBlocks[1][1];
+  const bottom: string = checkBlocks[0][2];
   if (top && middle && bottom) {
     if (top == middle && top == bottom) {
       Store.state.gameMode = false;
       return true;
     }
   }
+  return false;
+}
+
+function empty_spaces(): boolean {
+  const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
+
+  const topRow: number = checkBlocks[0].length;
+  const middleRow: number = checkBlocks[1].length;
+  const bottomRow: number = checkBlocks[2].length;
+  const boardSize: number = 3;
+
+  if (
+    topRow === boardSize &&
+    middleRow === boardSize &&
+    bottomRow === boardSize
+  )
+    return true;
   return false;
 }
 
