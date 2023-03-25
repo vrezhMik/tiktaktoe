@@ -13,32 +13,43 @@ import Square from "./components/Square.vue";
 import Player from "./components/Player.vue";
 import Store from "./store/index";
 import { watch } from "vue";
-function addItem(id: number): void {
-  if (Store.state.gameMode) {
-    if (!Store.state.blocks[id]) {
-      if (Store.state.turn % 2 == 0) Store.state.val = "X";
-      else Store.state.val = "O";
-      Store.state.turn++;
-      set_to_check_arr(id);
-    }
-    if (!Store.state.blocks[id]) Store.state.blocks[id] = Store.state.val;
-    Store.state.pressed = id;
+
+function addItem(blockId: number): void {
+  const { gameMode, blocks } = Store.state;
+  if (!gameMode) {
+    return;
   }
+
+  const blockAlreadyAdded = Boolean(blocks[blockId]);
+  if (blockAlreadyAdded) {
+    return;
+  }
+
+  if (!Store.state.blocks[blockId]) {
+    if (Store.state.turn % 2 == 0) Store.state.val = "X";
+    else Store.state.val = "O";
+    Store.state.turn++;
+    set_to_check_arr(blockId);
+  }
+  if (!Store.state.blocks[blockId])
+    Store.state.blocks[blockId] = Store.state.val;
+  Store.state.pressed = blockId;
 }
 watch(Store.state.blocks, () => {
-  if (Store.state.blocks.length > 2 && Store.state.gameMode) check();
+  if (Store.state.blocks.length > 2 && Store.state.gameMode)
+    check_the_board_state();
 });
 
-function check(): void {
-  if (empty_spaces()) end_game();
-  else if (check_diaganale_right()) end_game();
-  else if (check_diaganale_left()) end_game();
-  else if (check_row()) end_game();
-  else if (check_column()) end_game();
+function check_the_board_state(): void {
+  if (empty_spaces()) reset_the_game();
+  else if (check_diaganale_right()) reset_the_game();
+  else if (check_diaganale_left()) reset_the_game();
+  else if (check_row()) reset_the_game();
+  else if (check_column()) reset_the_game();
 }
 
 function check_row(): boolean {
-  var hasWinner: boolean = false;
+  let hasWinner: boolean = false;
   const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
   const boardSize: number = 3;
   for (let i = 0; i < boardSize; i++) {
@@ -62,7 +73,7 @@ function check_column(): boolean {
   const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
   const boardSize: number = 3;
 
-  for (var i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i++) {
     const top: string = checkBlocks[0][i];
     const middle: string = checkBlocks[1][i];
     const bottom: string = checkBlocks[2][i];
@@ -126,8 +137,8 @@ function empty_spaces(): boolean {
 }
 
 function is_array_full(arr: Array<string>) {
-  var count = 0;
-  for (var i = 0; i < 3; i++) {
+  let count = 0;
+  for (let i = 0; i < 3; i++) {
     if (!arr[i]) return count;
     count++;
   }
@@ -141,7 +152,7 @@ function set_to_check_arr(id: number): void {
   else Store.state.checkBlocks[2][Math.round(id % 3)] = Store.state.val;
 }
 
-function end_game(): void {
+function reset_the_game(): void {
   Store.state.gameMode = false;
   setTimeout(() => {
     Store.state.turn = 0;
