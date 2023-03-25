@@ -1,11 +1,19 @@
 <template>
   <div class="player">
-    <h1>Player:</h1>
-    <h1>Won:</h1>
-    <h1>Loose:</h1>
+    <h1>{{ props.player }}</h1>
+    <h1>Won: {{ props.won }}</h1>
+    <h1>Tie: {{ Store.state.tie }}</h1>
+    <h1>Loose: {{ props.loose }}</h1>
   </div>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import Store from "../store/index";
+const props = defineProps({
+  player: String,
+  won: Number,
+  loose: Number,
+});
+</script>
 <style lang="scss" scoped>
 .player {
   display: flex;
