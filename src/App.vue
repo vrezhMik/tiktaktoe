@@ -26,15 +26,21 @@ function addItem(id: number): void {
   }
 }
 watch(Store.state.blocks, () => {
-  if (Store.state.blocks.length > 2) check();
+  if (Store.state.blocks.length > 2 && Store.state.gameMode) check();
 });
 
 function check(): void {
-  if (empty_spaces()) end_game();
-  else if (check_diaganale_right()) end_game();
-  else if (check_diaganale_left()) end_game();
-  else if (check_row()) end_game();
-  else if (check_column()) end_game();
+  // if (empty_spaces()) end_game();
+  // else if (check_diaganale_right()) end_game();
+  // else if (check_diaganale_left()) end_game();
+  // else if (check_row()) end_game();
+  // else if (check_column()) end_game();
+
+  if (empty_spaces()) console.log("end_game_empty_spaces");
+  else if (check_diaganale_right()) console.log("end_game_diaganale_right");
+  else if (check_diaganale_left()) console.log("end_game_diaganale_left");
+  else if (check_row()) console.log("end_game_row");
+  else if (check_column()) console.log("end_game_column");
 }
 
 function check_row(): boolean {
@@ -134,12 +140,11 @@ function set_to_check_arr(id: number): void {
 
 function end_game(): void {
   Store.state.gameMode = false;
-
   setTimeout(() => {
     Store.state.turn = 0;
     Store.state.val = "X";
     Store.state.pressed = 0;
-    Store.state.blocks = [];
+    Store.state.blocks.splice(0, Store.state.blocks.length);
     Store.state.checkBlocks = [[], [], []];
     Store.state.gameMode = true;
   }, 500);
