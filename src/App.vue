@@ -26,7 +26,7 @@ function addItem(id: number): void {
   }
 }
 watch(Store.state.blocks, () => {
-  if (Store.state.blocks.length > 2) check();
+  if (Store.state.blocks.length > 2 && Store.state.gameMode) check();
 });
 
 function check(): void {
@@ -109,20 +109,29 @@ function check_diaganale_left(): boolean {
 function empty_spaces(): boolean {
   const checkBlocks: Array<Array<string>> = Store.state.checkBlocks;
 
-  const topRow: number = checkBlocks[0].length;
-  const middleRow: number = checkBlocks[1].length;
-  const bottomRow: number = checkBlocks[2].length;
+  const topRow: Array<string> = checkBlocks[0];
+  const middleRow: Array<string> = checkBlocks[1];
+  const bottomRow: Array<string> = checkBlocks[2];
   const boardSize: number = 3;
 
   if (
-    topRow === boardSize &&
-    middleRow === boardSize &&
-    bottomRow === boardSize
+    is_array_full(topRow) === boardSize &&
+    is_array_full(middleRow) === boardSize &&
+    is_array_full(bottomRow) === boardSize
   ) {
     Store.state.gameMode = false;
     return true;
   }
   return false;
+}
+
+function is_array_full(arr: Array<string>) {
+  var count = 0;
+  for (var i = 0; i < 3; i++) {
+    if (!arr[i]) return count;
+    count++;
+  }
+  return count;
 }
 
 function set_to_check_arr(id: number): void {
@@ -134,12 +143,11 @@ function set_to_check_arr(id: number): void {
 
 function end_game(): void {
   Store.state.gameMode = false;
-
   setTimeout(() => {
     Store.state.turn = 0;
     Store.state.val = "X";
     Store.state.pressed = 0;
-    Store.state.blocks = [];
+    Store.state.blocks.splice(0, Store.state.blocks.length);
     Store.state.checkBlocks = [[], [], []];
     Store.state.gameMode = true;
   }, 500);
