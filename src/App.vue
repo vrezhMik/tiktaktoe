@@ -12,6 +12,7 @@
 import Square from "./components/Square.vue";
 import Player from "./components/Player.vue";
 import Store from "./store/index";
+import { watch } from "vue";
 function addItem(id: number): void {
   if (Store.state.gameMode) {
     if (!Store.state.blocks[id]) {
@@ -22,16 +23,18 @@ function addItem(id: number): void {
     }
     if (!Store.state.blocks[id]) Store.state.blocks[id] = Store.state.val;
     Store.state.pressed = id;
-    if (Store.state.blocks.length > 2) check();
   }
 }
+watch(Store.state.blocks, () => {
+  if (Store.state.blocks.length > 2) check();
+});
 
 function check(): void {
   if (empty_spaces()) end_game();
-  else if (check_diaganale_right()) alert("You won1");
-  else if (check_diaganale_left()) alert("You won2");
-  else if (check_row()) alert("You won3");
-  else if (check_column()) alert("You won4");
+  else if (check_diaganale_right()) end_game();
+  else if (check_diaganale_left()) end_game();
+  else if (check_row()) end_game();
+  else if (check_column()) end_game();
 }
 
 function check_row(): boolean {
@@ -130,12 +133,16 @@ function set_to_check_arr(id: number): void {
 }
 
 function end_game(): void {
-  Store.state.turn = 0;
-  Store.state.val = "X";
-  Store.state.pressed = 0;
-  Store.state.blocks = [];
-  Store.state.checkBlocks = [[], [], []];
-  Store.state.gameMode = true;
+  Store.state.gameMode = false;
+
+  setTimeout(() => {
+    Store.state.turn = 0;
+    Store.state.val = "X";
+    Store.state.pressed = 0;
+    Store.state.blocks = [];
+    Store.state.checkBlocks = [[], [], []];
+    Store.state.gameMode = true;
+  }, 500);
 }
 </script>
 

@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { ref, Ref } from "vue";
+import { ref } from "vue";
 
 interface State {
   turn: number;
