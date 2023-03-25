@@ -1,10 +1,18 @@
 <template>
   <main>
-    <Player />
+    <Player
+      :won="Store.state.userWon"
+      player="User"
+      :loose="Store.state.opponentWon"
+    />
     <div class="container">
       <Square v-for="i in 9" :key="i" @click="addItem(i - 1)" :id="i - 1" />
     </div>
-    <Player />
+    <Player
+      player="AI"
+      :loose="Store.state.userWon"
+      :won="Store.state.opponentWon"
+    />
   </main>
 </template>
 

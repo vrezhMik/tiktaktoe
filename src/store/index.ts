@@ -8,6 +8,9 @@ interface State {
   blocks: Array<string>;
   checkBlocks: Array<Array<string>>;
   gameMode: boolean;
+  userWon: number;
+  opponentWon: number;
+  tie: number;
 }
 
 export default createStore<State>({
@@ -18,6 +21,9 @@ export default createStore<State>({
     blocks: ref([]).value,
     checkBlocks: ref([[], [], []]).value,
     gameMode: ref(true).value,
+    userWon: ref(0).value,
+    opponentWon: ref(0).value,
+    tie: ref(0).value,
   },
   mutations: {},
   actions: {},
