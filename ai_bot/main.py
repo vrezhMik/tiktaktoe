@@ -1,5 +1,7 @@
+from flask import Flask, jsonify, request
 from easyAI import TwoPlayerGame, AI_Player, Negamax
 from easyAI.Player import Human_Player
+from flask_cors import CORS
 
 
 class TicTacToe(TwoPlayerGame):
@@ -9,27 +11,28 @@ class TicTacToe(TwoPlayerGame):
         self.current_player = 1
 
     def possible_moves(self):
-        return [i + 1 for i, e in enumerate(self.board) if e == 0]
+        return [i for i, e in enumerate(self.board) if e == 0]
 
     def make_move(self, move):
-        self.board[int(move) - 1] = self.current_player
+        self.board[int(move)] = self.current_player
+        return move
 
     def unmake_move(self, move):
-        self.board[int(move) - 1] = 0
+        self.board[int(move)] = 0
 
     def lose(self):
         return any(
             [
-                all([(self.board[c - 1] == self.opponent_index) for c in line])
+                all([(self.board[c] == self.opponent_index) for c in line])
                 for line in [
-                    [1, 2, 3],
-                    [4, 5, 6],
-                    [7, 8, 9],
+                    [0, 1, 2],
+                    [3, 4, 5],
+                    [6, 7, 8],
+                    [0, 3, 6],
                     [1, 4, 7],
                     [2, 5, 8],
-                    [3, 6, 9],
-                    [1, 5, 9],
-                    [3, 5, 7],
+                    [0, 4, 8],
+                    [2, 4, 6],
                 ]
             ]
         )
@@ -53,7 +56,25 @@ class TicTacToe(TwoPlayerGame):
         return -100 if self.lose() else 0
 
 
-if __name__ == "__main__":
+app = Flask(__name__)
+CORS(app)
+ai_algo = Negamax(6)
+game = TicTacToe([Human_Player(), AI_Player(ai_algo)])
 
-    ai_algo = Negamax(6)
-    TicTacToe([Human_Player(), AI_Player(ai_algo)]).play()
+
+@app.route('/play', methods=['POST'])
+def play():
+    data = request.json  # get the JSON data from the request body
+    move = data.get('move')  # get the 'id' parameter from the JSON data
+    game.make_move(move)
+    if not game.is_over():
+        ai_player = game.players[1]
+        ai_move = ai_player.ask_move(game)
+        ai_step = game.make_move(ai_move)
+    return jsonify({'game_state': game.show(), 'game_over': game.is_over(), 'win': game.lose(), "move": ai_step})
+
+
+if __name__ == '__main__':
+    # ai_algo = Negamax(6)
+    # TicTacToe([Human_Player(), AI_Player(ai_algo)]).play()
+    app.run()

@@ -6,7 +6,12 @@
       :loose="Store.state.opponentWon"
     />
     <div class="container">
-      <Square v-for="i in 9" :key="i" @click="addItem(i - 1)" :id="i - 1" />
+      <Square
+        v-for="i in 9"
+        :key="i"
+        @click="addItem(i - 1, true)"
+        :id="i - 1"
+      />
     </div>
     <Player
       player="AI"
@@ -21,8 +26,9 @@ import Square from "./components/Square.vue";
 import Player from "./components/Player.vue";
 import Store from "./store/index";
 import { watch } from "vue";
+import axios from "axios";
 
-function addItem(blockId: number): void {
+function addItem(blockId: number, is_user: boolean): void {
   const { gameMode, blocks } = Store.state;
   if (!gameMode) {
     return;
@@ -42,6 +48,7 @@ function addItem(blockId: number): void {
   if (!Store.state.blocks[blockId])
     Store.state.blocks[blockId] = Store.state.val;
   Store.state.pressed = blockId;
+  if (is_user) sendData(blockId);
 }
 watch(Store.state.blocks, () => {
   if (Store.state.blocks.length > 2 && Store.state.gameMode)
@@ -170,6 +177,18 @@ function reset_the_game(): void {
     Store.state.checkBlocks = [[], [], []];
     Store.state.gameMode = true;
   }, 500);
+}
+
+async function sendData(user_move: number) {
+  await axios
+    .post("http://127.0.0.1:5000/play", { move: user_move })
+    .then((res) => {
+      const ai_move = res.data.move;
+      addItem(ai_move, false);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 }
 </script>
 
