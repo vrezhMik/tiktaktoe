@@ -199,13 +199,20 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  @media screen and (max-width: 391px) {
+    display: block;
+  }
   .container {
     border: 1px solid black;
     width: 450px;
     height: 450px;
     display: flex;
     flex-wrap: wrap;
+    @media screen and (max-width: 391px) {
+      width: 390px;
+      height: 390px;
+      margin: 0 auto;
+    }
   }
 }
 </style>
