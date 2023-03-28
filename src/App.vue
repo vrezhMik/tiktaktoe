@@ -199,13 +199,22 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  @media screen and (max-width: 450px) {
+    display: block;
+    background-color: #9ad4ff;
+  }
   .container {
     border: 1px solid black;
     width: 450px;
     height: 450px;
     display: flex;
     flex-wrap: wrap;
+    @media screen and (max-width: 450px) {
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+      background-color: white;
+    }
   }
 }
 </style>

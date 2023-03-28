@@ -16,7 +16,7 @@ const props = defineProps({
   id: Number,
 });
 </script>
-<style scoped>
+<style scoped lang="scss">
 .square {
   height: 150px;
   width: 150px;
@@ -26,6 +26,10 @@ const props = defineProps({
   justify-content: center;
   align-items: center;
   font-size: 100px;
+  @media screen and (max-width: 450px) {
+    height: 100px;
+    width: 100px;
+  }
 }
 .x {
   color: red;
