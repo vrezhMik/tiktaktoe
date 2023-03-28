@@ -26,9 +26,9 @@ const props = defineProps({
   justify-content: center;
   align-items: center;
   font-size: 100px;
-  @media screen and (max-width: 391px) {
-    height: 130px;
-    width: 130px;
+  @media screen and (max-width: 450px) {
+    height: 100px;
+    width: 100px;
   }
 }
 .x {

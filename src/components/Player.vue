@@ -24,11 +24,11 @@ const props = defineProps({
   height: 100%;
   width: 250px;
   background-color: #9ad4ff;
-  @media screen and (max-width: 391px) {
+  @media screen and (max-width: 450px) {
     width: 100%;
     padding-top: 10px;
     row-gap: 5px;
-    height: 220px;
+    height: 210px;
   }
 }
 </style>
