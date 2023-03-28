@@ -48,7 +48,7 @@ function addItem(blockId: number, is_user: boolean): void {
   if (!Store.state.blocks[blockId])
     Store.state.blocks[blockId] = Store.state.val;
   Store.state.pressed = blockId;
-  if (is_user) sendData(blockId);
+  if (is_user) sendData(blockId + 1);
 }
 watch(Store.state.blocks, () => {
   if (Store.state.blocks.length > 2 && Store.state.gameMode)
@@ -167,7 +167,8 @@ function set_to_check_arr(id: number): void {
   else Store.state.checkBlocks[2][Math.round(id % 3)] = Store.state.val;
 }
 
-function reset_the_game(): void {
+async function reset_the_game() {
+  await axios.post("http://127.0.0.1:5000/play", { move: false, game: false });
   Store.state.gameMode = false;
   setTimeout(() => {
     Store.state.turn = 0;
@@ -181,7 +182,7 @@ function reset_the_game(): void {
 
 async function sendData(user_move: number) {
   await axios
-    .post("http://127.0.0.1:5000/play", { move: user_move })
+    .post("http://127.0.0.1:5000/play", { move: user_move, game: true })
     .then((res) => {
       const ai_move = res.data.move;
       addItem(ai_move, false);
